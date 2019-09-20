@@ -15,7 +15,7 @@ const DomManger = (WeatherLoader) => {
     CountriesLoader.loadCountries().then(
       (countries) => {
         countries.forEach(
-          (country) => countriesSelector.appendChild(createElement({
+          country => countriesSelector.appendChild(createElement({
             type: 'option',
             text: `${country.name} (${country.code})`,
             value: country.code,

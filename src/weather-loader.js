@@ -38,7 +38,7 @@ const WeatherLoader = (() => {
     }
     return (
       fetch(url).then(
-        (response) => response.json(),
+        response => response.json(),
       )
     ).then(
       (response) => {

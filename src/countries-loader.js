@@ -1,7 +1,7 @@
 const CountriesLoader = (() => {
   const url = 'https://restcountries.eu/rest/v2/all';
   const loadCountries = () => fetch(url).then(
-    (response) => response.json(),
+    response => response.json(),
   ).then(
     (response) => {
       const res = [];
