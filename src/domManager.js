@@ -1,4 +1,5 @@
 import createElement from "./helpers";
+import CountriesLoader from "./countries-loader"
 
 let DomManger = (WeatherLoader) => {
   let currentWeatherIcon = document.getElementById("currentWeatherIcon");
@@ -8,22 +9,35 @@ let DomManger = (WeatherLoader) => {
   let unitSelector = document.getElementById("unitSelector")
 
   let cityName = document.getElementById("cityName");
-  let countryName = document.getElementById("countryName");
-  
+  let countriesSelector = document.getElementById("countriesSelector");
+
   let initiate = () => {
+    CountriesLoader.loadCountries().then(
+      (countries) => {
+        countries.forEach(
+          country =>
+          countriesSelector.appendChild(createElement({
+            type: "option",
+            text: `${country.name} (${country.code})`,
+            value: country.code
+          }))
+        )
+      }
+    )
+
     submitFormButton.addEventListener("click", (event) => {
       event.preventDefault();
       let city = cityName.value
-      let country=countryName.value
+      let country=countriesSelector.options[countriesSelector.selectedIndex].value;
+      let units = unitSelector.options[unitSelector.selectedIndex].value;
+
       if (!(/([^\s])/.test(city))) {
         alert("City name can't empty!");
         return;
       }
-      if (!(/([^\s])/.test(country))) {
-        country=null;
+      if (country === "None") {
+        country = null;
       }
-      
-      let units = unitSelector.options[unitSelector.selectedIndex].value;
       loadWeather({
         city,
         country,
