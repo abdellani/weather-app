@@ -1,65 +1,58 @@
 const WeatherLoader = (() => {
-  let key = "d244c1a420bbb9c01c0c9d14d0126fe0"
-  let baseUrl = "http://api.openweathermap.org/data/2.5"
+  const key = 'd244c1a420bbb9c01c0c9d14d0126fe0';
+  const baseUrl = 'http://api.openweathermap.org/data/2.5';
 
-  let loadCurrentWeather = ({
+  const loadCurrentWeather = ({
     city,
     country = null,
-    units = null
-  }) => {
-    return loadWeather({
-      city,
-      country,
-      units,
-      path: "weather"
-    })
-  }
-  let load5DaysWeather = ({
+    units = null,
+  }) => loadWeather({
+    city,
+    country,
+    units,
+    path: 'weather',
+  });
+  const load5DaysWeather = ({
     city,
     country = null,
-    units = null
-  }) => {
-    return loadWeather({
-      city,
-      country,
-      units,
-      path: "forecast"
-    })
-  }
+    units = null,
+  }) => loadWeather({
+    city,
+    country,
+    units,
+    path: 'forecast',
+  });
 
   let loadWeather = ({
     city,
     country = null,
     units = null,
-    path
+    path,
   }) => {
     let url;
-    let tempsUnits = (units == "F") ? "imperial" : "metric";
+    const tempsUnits = (units === 'F') ? 'imperial' : 'metric';
     if (country !== null) {
-      url = `${baseUrl}/${path}?q=${city},${country}&units=${tempsUnits}&APPID=${key}`
+      url = `${baseUrl}/${path}?q=${city},${country}&units=${tempsUnits}&APPID=${key}`;
     } else {
-      url = `${baseUrl}/${path}?q=${city}&units=${tempsUnits}&APPID=${key}`
+      url = `${baseUrl}/${path}?q=${city}&units=${tempsUnits}&APPID=${key}`;
     }
     return (
       fetch(url).then(
-        response =>
-        response.json()
+        (response) => response.json(),
       )
     ).then(
-      response => {
-        console.log(response)
-        if (response.cod != 200) {
-          throw Error(response.message)
+      (response) => {
+        if (Number(response.cod) !== 200) {
+          throw Error(response.message);
         }
         return response;
-      }
-    )
-
+      },
+    );
   };
   return {
     loadCurrentWeather,
-    load5DaysWeather
-  }
-})()
+    load5DaysWeather,
+  };
+})();
 
 export default WeatherLoader;

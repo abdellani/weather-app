@@ -1,172 +1,170 @@
-import createElement from "./helpers";
-import CountriesLoader from "./countries-loader"
+import createElement from './helpers';
+import CountriesLoader from './countries-loader';
 
-let DomManger = (WeatherLoader) => {
-  let currentWeatherIcon = document.getElementById("currentWeatherIcon");
-  let currentWeatherDiv = document.getElementById("currentWeatherDiv");
-  let weatherForecastDiv = document.getElementById("weatherForecastDiv");
-  let submitFormButton = document.getElementById("submitFormButton");
-  let unitSelector = document.getElementById("unitSelector")
+const DomManger = (WeatherLoader) => {
+  const currentWeatherIcon = document.getElementById('currentWeatherIcon');
+  const currentWeatherDiv = document.getElementById('currentWeatherDiv');
+  const weatherForecastDiv = document.getElementById('weatherForecastDiv');
+  const submitFormButton = document.getElementById('submitFormButton');
+  const unitSelector = document.getElementById('unitSelector');
 
-  let cityName = document.getElementById("cityName");
-  let countriesSelector = document.getElementById("countriesSelector");
+  const cityName = document.getElementById('cityName');
+  const countriesSelector = document.getElementById('countriesSelector');
 
-  let initiate = () => {
+  const initiate = () => {
     CountriesLoader.loadCountries().then(
       (countries) => {
         countries.forEach(
-          country =>
-          countriesSelector.appendChild(createElement({
-            type: "option",
+          (country) => countriesSelector.appendChild(createElement({
+            type: 'option',
             text: `${country.name} (${country.code})`,
-            value: country.code
-          }))
-        )
-      }
-    )
+            value: country.code,
+          })),
+        );
+      },
+    );
 
-    submitFormButton.addEventListener("click", (event) => {
+    submitFormButton.addEventListener('click', (event) => {
       event.preventDefault();
-      let city = cityName.value
-      let country=countriesSelector.options[countriesSelector.selectedIndex].value;
-      let units = unitSelector.options[unitSelector.selectedIndex].value;
+      const city = cityName.value;
+      let country = countriesSelector.options[countriesSelector.selectedIndex].value;
+      const units = unitSelector.options[unitSelector.selectedIndex].value;
 
       if (!(/([^\s])/.test(city))) {
         alert("City name can't empty!");
         return;
       }
-      if (country === "None") {
+      if (country === 'None') {
         country = null;
       }
       loadWeather({
         city,
         country,
-        units
-      })
-    })
-  }
+        units,
+      });
+    });
+  };
 
   let loadWeather = ({
     city,
     country,
-    units
+    units,
   }) => {
-
     WeatherLoader.loadCurrentWeather({
       city,
       country,
-      units
+      units,
     }).then(
       (response) => {
         currentWeatherDiv.innerHTML = '';
-        currentWeatherIcon.classList.remove("d-none")
-        currentWeatherIcon.src = `http://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`
-        currentWeatherDiv.appendChild(currentWeatherIcon)
+        currentWeatherIcon.classList.remove('d-none');
+        currentWeatherIcon.src = `http://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`;
+        currentWeatherDiv.appendChild(currentWeatherIcon);
         renderResultsInsideCards({
           div: currentWeatherDiv,
           results: response,
-          location: true
-        })
-      }
+          location: true,
+        });
+      },
     ).catch(
       (error) => {
         currentWeatherDiv.innerHTML = `
         <div class="bg-danger p-5 text-center">
           The following error occured :<br/>  
-          ${ error }
+          ${error}
         </div>
-        `
-      }
-    )
+        `;
+      },
+    );
     WeatherLoader.load5DaysWeather({
       city,
       country,
-      units
+      units,
     }).then(
       (response) => {
         weatherForecastDiv.innerHTML = '';
         response.list.forEach(
           (element) => {
-            let cardBody = createElement({
-              type: "div"
-            })
+            const cardBody = createElement({
+              type: 'div',
+            });
             renderResultsInsideCards({
               div: cardBody,
               results: element,
               date: true,
-              icon: true
-            })
-            let card = createCard(cardBody.innerHTML)
+              icon: true,
+            });
+            const card = createCard(cardBody.innerHTML);
             weatherForecastDiv.appendChild(card);
-          }
-        )
-      }
+          },
+        );
+      },
     ).catch(
       (error) => {
         weatherForecastDiv.innerHTML = `
         <div class="bg-danger w-100 mt-3 p-5 text-center">
           The following error occured :<br/>  
-          ${ error }
+          ${error}
         </div>
-        `
-      }
-    )
-  }
+        `;
+      },
+    );
+  };
 
   let createCard = (content) => {
-    let card = createElement({
-      type: "div"
-    })
-    card.classList.add("col-md-4")
-    card.classList.add("p-1")
+    const card = createElement({
+      type: 'div',
+    });
+    card.classList.add('col-md-4');
+    card.classList.add('p-1');
     card.innerHTML = `
     <div class="card">
         <div class="card-body p-1">
         ${content}
         </div>
     </div>
-    `
+    `;
     return card;
-  }
+  };
   let renderResultsInsideCards = ({
     div,
     results,
     date = false,
     location = false,
-    icon = false
+    icon = false,
   }) => {
     if (icon) {
-      let img = createElement({
-        type: "img",
-      })
-      img.src = `http://openweathermap.org/img/wn/${results.weather[0].icon}@2x.png`
-      img.classList.add("m-auto");
-      img.classList.add("d-block");
-      div.appendChild(img)
+      const img = createElement({
+        type: 'img',
+      });
+      img.src = `http://openweathermap.org/img/wn/${results.weather[0].icon}@2x.png`;
+      img.classList.add('m-auto');
+      img.classList.add('d-block');
+      div.appendChild(img);
     }
     if (location) {
       div.appendChild(createElement({
-        type: "p",
+        type: 'p',
         text: `Location : ${results.name} (${results.sys.country})`,
-        _class: "card-text"
-      }))
+        _class: 'card-text',
+      }));
     }
-    let description = createElement({
-      type: "div"
-    })
+    const description = createElement({
+      type: 'div',
+    });
     description.innerHTML = `
     
     <p class="card-text mb-2"> 
       ${results.weather[0].main}
       <small>(${results.weather[0].description})</small>
     </p>
-    `
-    div.appendChild(description)
+    `;
+    div.appendChild(description);
 
-    let temp = createElement({
-      type: "div"
-    })
-    temp.classList.add("d-flex", "flex-wrap")
+    const temp = createElement({
+      type: 'div',
+    });
+    temp.classList.add('d-flex', 'flex-wrap');
     temp.innerHTML = `
     <div class="d-flex flex-nowrap">
       <i class="fas fa-temperature-low"></i>${results.main.temp}°
@@ -177,12 +175,12 @@ let DomManger = (WeatherLoader) => {
     <div class="d-flex flex-nowrap">
       <i class="fas fa-arrow-circle-down"></i>${results.main.temp_max}°
     </div>
-    `
-    div.appendChild(temp)
-    let wind = createElement({
-      type: "div"
-    })
-    wind.classList.add("d-flex", "flex-wrap")
+    `;
+    div.appendChild(temp);
+    const wind = createElement({
+      type: 'div',
+    });
+    wind.classList.add('d-flex', 'flex-wrap');
     wind.innerHTML = `
     <div class="d-flex flex-nowrap">
     <i class="fas fa-wind"></i> 
@@ -192,13 +190,13 @@ let DomManger = (WeatherLoader) => {
     <i class="far fa-compass"></i> 
     ${results.wind.deg} °
     </div>
-    `
-    div.appendChild(wind)
+    `;
+    div.appendChild(wind);
 
-    let humidityAndPressure = createElement({
-      type: "div"
-    })
-    humidityAndPressure.classList.add("d-flex", "flex-wrap")
+    const humidityAndPressure = createElement({
+      type: 'div',
+    });
+    humidityAndPressure.classList.add('d-flex', 'flex-wrap');
     humidityAndPressure.innerHTML = `
     <div class="d-flex flex-nowrap">
     <i class="fas fa-tachometer-alt"></i>
@@ -208,24 +206,23 @@ let DomManger = (WeatherLoader) => {
     <i class="fas fa-tint"></i>
     ${results.main.humidity}
     </div>
-    `
-    div.appendChild(humidityAndPressure)
+    `;
+    div.appendChild(humidityAndPressure);
 
     if (date) {
-      let dateDiv = createElement({
-        type: "div"
-      })
+      const dateDiv = createElement({
+        type: 'div',
+      });
       dateDiv.innerHTML = `
       <i class="far fa-clock"></i>
       ${results.dt_txt}
-      `
-      div.appendChild(dateDiv)
+      `;
+      div.appendChild(dateDiv);
     }
-  }
+  };
   return {
     initiate,
-    loadWeather
-  }
-}
+  };
+};
 
 export default DomManger;

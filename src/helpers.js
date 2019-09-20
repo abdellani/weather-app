@@ -1,4 +1,6 @@
-const createElement = ({type, text = null, value = null, _class = null}) => {
+const createElement = ({
+  type, text = null, value = null, _class = null,
+}) => {
   const node = document.createElement(type);
   if (text !== null) {
     const textNode = document.createTextNode(text);
