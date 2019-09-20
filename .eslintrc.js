@@ -16,6 +16,8 @@ module.exports = {
   },
   rules: {
     "no-use-before-define":"off",
-    "no-alert":"off"
+    "no-alert":"off",
+    "no-mixed-operators":"off",
+    "no-param-reassign":"off"
   },
 };

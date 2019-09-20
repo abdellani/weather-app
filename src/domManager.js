@@ -11,23 +11,21 @@ const DomManger = (WeatherLoader) => {
   const cityName = document.getElementById('cityName');
   const countriesSelector = document.getElementById('countriesSelector');
 
-  let convertCtoF = x => (x * 9 / 5) + 32
-  let convertFtoC = x => (x - 32) * 5 / 9
+  const convertCtoF = x => (x * 9 / 5) + 32;
+  const convertFtoC = x => (x - 32) * 5 / 9;
   const initiate = () => {
-    unitSelector.addEventListener("change", () => {
-      let temperatures = document.querySelectorAll(".temperature");
+    unitSelector.addEventListener('change', () => {
+      const temperatures = document.querySelectorAll('.temperature');
       const unit = unitSelector.options[unitSelector.selectedIndex].value;
       temperatures.forEach((temperature) => {
-        let temp = temperature.innerHTML;
-        if (unit === "C") {
+        const temp = temperature.innerHTML;
+        if (unit === 'C') {
           temperature.innerHTML = Number(convertFtoC(temp).toFixed(2));
         } else {
           temperature.innerHTML = Number(convertCtoF(temp).toFixed(2));
         }
-
-      })
-
-    })
+      });
+    });
     CountriesLoader.loadCountries().then(
       (countries) => {
         countries.forEach(
