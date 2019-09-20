@@ -1,0 +1,16 @@
+.bg-light-blue {
+  background-color: #61f2f5 !important;
+}
+
+.bg-violet {
+  background-color: #723881 !important;
+}
+
+.bg-gray {
+  background-color: #e0e0e0;
+}
+
+#currentWeatherIcon {
+  width: 100px;
+  float: right;
+}
