@@ -11,7 +11,23 @@ const DomManger = (WeatherLoader) => {
   const cityName = document.getElementById('cityName');
   const countriesSelector = document.getElementById('countriesSelector');
 
+  let convertCtoF = x => (x * 9 / 5) + 32
+  let convertFtoC = x => (x - 32) * 5 / 9
   const initiate = () => {
+    unitSelector.addEventListener("change", () => {
+      let temperatures = document.querySelectorAll(".temperature");
+      const unit = unitSelector.options[unitSelector.selectedIndex].value;
+      temperatures.forEach((temperature) => {
+        let temp = temperature.innerHTML;
+        if (unit === "C") {
+          temperature.innerHTML = Number(convertFtoC(temp).toFixed(2));
+        } else {
+          temperature.innerHTML = Number(convertCtoF(temp).toFixed(2));
+        }
+
+      })
+
+    })
     CountriesLoader.loadCountries().then(
       (countries) => {
         countries.forEach(
@@ -167,13 +183,13 @@ const DomManger = (WeatherLoader) => {
     temp.classList.add('d-flex', 'flex-wrap');
     temp.innerHTML = `
     <div class="d-flex flex-nowrap">
-      <i class="fas fa-temperature-low"></i>${results.main.temp}°
+      <i class="fas fa-temperature-low"></i><span class="temperature">${results.main.temp}</span>°
     </div>
     <div class="d-flex flex-nowrap">
-      <i class="fas fa-arrow-circle-up"></i>${results.main.temp_min}°
+      <i class="fas fa-arrow-circle-up"></i><span class="temperature">${results.main.temp_min}</span>°
     </div>
     <div class="d-flex flex-nowrap">
-      <i class="fas fa-arrow-circle-down"></i>${results.main.temp_max}°
+      <i class="fas fa-arrow-circle-down"></i><span class="temperature">${results.main.temp_max}</span>°
     </div>
     `;
     div.appendChild(temp);
