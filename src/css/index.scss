@@ -1,2 +1,81 @@
-body{
+body {
+  height: 100%;
+  min-height: 100vh;
+  background: linear-gradient(175deg,#c9a667 0,#ff848e 100%);
+  .form {
+    .button {
+      font-size: 30px;
+    }
+  }
+
+  .card-container {
+    border-radius: 15px;
+    color: #dddddd;
+
+    .current-weather {
+      color: #dddddd;
+
+      .temp {
+        font-size: 80px;
+      }
+
+      .pressure {
+        color: #2fcacb;
+      }
+
+      .wind {
+        color: #fe6977;
+        border-radius: 50%;
+        border: 2px solid #fe6977;
+        padding: 3px;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+      }
+
+      .humidity {
+        color: #dddddd;
+      }
+
+      .sun-icon {
+        color: #ec6e4c;
+      }
+    }
+
+    .column {
+      border-right: 1px solid #3f4a4a;
+      line-height: 80%;
+      color: #bec1b6;
+      font-size: 13px;
+
+      .temp {
+        font-size: 1rem;
+      }
+
+      img {
+        width: 50px;
+      }
+
+      >div {
+        padding-bottom: 10px;
+
+        &:first-child {
+          padding-bottom: 0px;
+        }
+
+        &:nth-child(3) {
+          padding-bottom: 15px;
+        }
+
+      }
+
+      .unit {
+        font-size: 10px;
+      }
+
+      &:last-child {
+        border: none;
+      }
+
+    }
+  }
 }

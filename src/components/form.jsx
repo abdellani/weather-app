@@ -1,11 +1,14 @@
 import React, { Component } from "react"
 import { ADD } from "../actions"
 import { connect } from "react-redux"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+
 class Form extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      location: ""
+      location: "stockholm"
     }
   }
   handleChange(e) {
@@ -15,48 +18,77 @@ class Form extends Component {
   }
   handleSubmit(e) {
     e.preventDefault()
-    this.sendQuery().
-    then(response => this.checkResponse(response)).
-    then(data => data && this.updateStore(data))
+    this.sendQueries().
+      then(responses => this.checkResponse(responses)).
+      then(data => data && this.updateStore(data))
 
   }
 
-  async sendQuery() {
-    // const city = "Algiers";
-    // const country = "Algeria";
-    // const url = `${baseUrl}/${path}?q=${city},${country}&units=${tempsUnits}&APPID=${key}`;
+  sendQueries() {
     let { location } = this.state
     const baseUrl = 'http://api.openweathermap.org/data/2.5';
-    const key =process.env.REACT_APP_API_KEY ;
+    const key = process.env.REACT_APP_API_KEY;
     const path = 'forecast';
     const tempsUnits = 'metric'; //(units === 'F') ? 'imperial' : 'metric';
-    const url = `${baseUrl}/${path}?q=${location}&units=${tempsUnits}&APPID=${key}`;
-    const response = await fetch(url);
-    return await response.json();
+    const url = `${baseUrl}/weather?q=${location}&units=${tempsUnits}&APPID=${key}`;
+    const url1 = `${baseUrl}/${path}?q=${location}&units=${tempsUnits}&APPID=${key}`;
+    return Promise.all([this.sendQuery(url), this.sendQuery(url1)])
   }
+  sendQuery(url) {
+    return fetch(url)
+      .then(response => response.json())
+  }
+  checkCurrentWeather(data) {
+    let { main, wind, weather, sys } = data
+    let { sunrise, sunset } = sys
+    sunrise = new Date(sunrise * 1000).toLocaleTimeString('en-GB').slice(0, 5);
+    sunset = new Date(sunset * 1000).toLocaleTimeString('en-GB').slice(0, 5);
 
-  checkResponse(response) {
-    let { cod } = response
+    wind = wind["speed"]
+    weather = weather[0]["icon"]
+    let { pressure, humidity, temp } = main
+    temp = temp.toFixed(0)
+    pressure = (pressure / 1000).toFixed(2)
+
+    return {
+      weather, temp, pressure, wind, humidity, sunrise, sunset
+    }
+  }
+  checkResponse(responses) {
+    let currentWeather = responses[0]
+    let { cod } = currentWeather
+    console.log(cod !== 200)
+    if (cod !== 200) {
+      return
+    }
+    let current = this.checkCurrentWeather(currentWeather)
+
+    let forecastData = responses[1];
+
+    ({ cod } = forecastData)
+
     if (cod !== "200") {
       return
     }
-    let { list } = response
-    let { name, country } = response["city"]
-    let city=name
+    let { list } = forecastData
+    let { name, country } = forecastData["city"]
+    let city = name
     let details = []
-    list.forEach(
+    list.slice(0, 9).forEach(
       (item) => {
-        let { main, dt_txt, wind,weather } = item
-        weather=weather[0]["icon"]
-        wind=wind["speed"]
-        let time=dt_txt.split(" ")[1].slice(0,-3)
+        let { main, dt_txt, wind, weather } = item
+        weather = weather[0]["icon"]
+        wind = wind["speed"]
+        let time = dt_txt.split(" ")[1].slice(0, -3)
         let { pressure, temp, humidity } = main
+        pressure = (pressure / 1000).toFixed(2)
+        temp = temp.toFixed(0)
         details.push({
-          pressure, temp, humidity, time, wind,weather
+          pressure, temp, humidity, time, wind, weather
         })
       }
     )
-    return { city, country, details }
+    return { city, country, details, current }
   }
 
   updateStore(structuredData) {
@@ -69,15 +101,16 @@ class Form extends Component {
   render() {
     let { location } = this.state
     return (
-      <div>
-        <form>
-          <input type="text" value={location} onChange={(e) => this.handleChange(e)} />
-          <input type="submit" onClick={(e) => this.handleSubmit(e)} />
+      <div className="form d-flex justify-content-center align-items-center m-4 p-4">
+        <form className="d-flex justify-content-center align-items-center">
+          <input type="text" className="form-control" value={location} onChange={(e) => this.handleChange(e)} />
+          <FontAwesomeIcon className="button text-success mx-4" icon={faPlusCircle} onClick={(e) => this.handleSubmit(e)} />
         </form>
       </div>
     )
   }
 }
+
 const mapDispatchToProps = dispatch => {
   return (
     {
