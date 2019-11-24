@@ -13,7 +13,7 @@ const Column = ({ pressure, temp, humidity, time, wind, weather }) =>
       {time}
     </div>
     <div>
-      <img src={`http://openweathermap.org/img/wn/${weather}@2x.png`} alt="Weather icon" />
+      <img src={`https://openweathermap.org/img/wn/${weather}@2x.png`} alt="Weather icon" />
     </div>
     <div className="temp">
       {temp}°
@@ -35,7 +35,7 @@ const CurrentWeather = ({ weather, temp, pressure, wind, humidity, sunrise, suns
     </div>
     <div className="d-flex justify-content-around align-items-center">
       <div>
-        <img src={`http://openweathermap.org/img/wn/${weather}@2x.png`} />
+        <img src={`https://openweathermap.org/img/wn/${weather}@2x.png`} />
       </div>
       <div className="temp mx-3">
         {temp}°

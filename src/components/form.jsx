@@ -26,7 +26,7 @@ class Form extends Component {
 
   sendQueries() {
     let { location } = this.state
-    const baseUrl = 'http://api.openweathermap.org/data/2.5';
+    const baseUrl = 'https://api.openweathermap.org/data/2.5';
     const key = process.env.REACT_APP_API_KEY;
     const path = 'forecast';
     const tempsUnits = 'metric'; //(units === 'F') ? 'imperial' : 'metric';
@@ -57,7 +57,6 @@ class Form extends Component {
   checkResponse(responses) {
     let currentWeather = responses[0]
     let { cod } = currentWeather
-    console.log(cod !== 200)
     if (cod !== 200) {
       return
     }
