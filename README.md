@@ -1,5 +1,5 @@
 # Weather app
-## About the programm
+## About the program
 
 ![Weather app](https://abdellani.github.io/images/weather-app.png)
 
