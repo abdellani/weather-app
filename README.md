@@ -38,5 +38,5 @@ For a live demo, [click here](https://abdellani.github.io/weather-app/)
 
 ### Author
 
-Mohamed Abdellani [Github](https://github.com/abdellani)
+Mohamed Abdellani [github](https://github.com/abdellani)
 
