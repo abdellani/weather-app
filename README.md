@@ -5,7 +5,7 @@ HTML, CSS and Javascript.
 
 ## About Project
 
-In this web application, User can check the current weather, along with the expectation for the next 12 hours, for any city.
+In this web application, User can check the current weather, along with the expectation for the next 24 hours, for any city.
 
 This application is base on the API provided by [Open Weather Map](https://openweathermap.org/).
 
